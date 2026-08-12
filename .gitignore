@@ -66,3 +66,8 @@ __pycache__/
 
 # Supabase CLI generated local state
 supabase/.temp/
+
+# Node / npm development tooling
+node_modules/
+npm-debug.log*
+.npmrc
