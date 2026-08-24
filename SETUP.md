@@ -73,7 +73,7 @@ Do not reintroduce `Minimal`.
 
 ## 4. Verified Development Tools
 
-The following environment components were verified during Stage 4 setup:
+The following environment components were verified during Roadmap Stage 2 repository and environment verification:
 
 | Tool | Verified state |
 |---|---|
@@ -81,13 +81,18 @@ The following environment components were verified during Stage 4 setup:
 | Node.js | v24.18.0 |
 | npm | 11.16.0 |
 | npx | 11.16.0 |
+| Python | 3.12.10 HelpHub backend baseline; Python 3.13.7 is also installed but is not used by the backend virtual environment |
+| backend virtual environment | `backend\.venv` verified with Python 3.12.10 |
+| pip | 26.2.1 inside `backend\.venv` |
 | Supabase CLI | 2.113.0 |
+| Firebase CLI | 15.24.0 via `firebase.cmd` |
 | WSL | 2.7.11.0 |
 | Docker Desktop | 4.86.0 |
 | Docker Engine | 29.7.2 |
 | VS Code | Available |
-| Flutter/Dart | Existing project toolchain; reverify before Flutter implementation |
-| Android Studio | Reverify SDK/emulator before Android testing |
+| Flutter/Dart | `flutter analyze` and `flutter test` pass on merged `develop` |
+| Android | Emulator detected; HelpHub build, install, launch, and visible UI verified |
+| Chrome | HelpHub web build, debug connection, launch, and visible UI verified |
 
 ## 5. Windows PowerShell npm Note
 
@@ -418,12 +423,25 @@ Any development configuration must be versioned.
 Current phase:
 
 ```text
-Stage 4 - Supabase Schema, Auth, Storage, and RLS
+Roadmap Stage 2 - Repository and Environment Verification
 ```
 
-Task 04.1 establishes the safe local Supabase development environment.
+Verified portions of the current gate include:
 
-Application schema implementation begins only after this setup task is verified and documented.
+- Flutter static analysis and automated tests pass;
+- HelpHub launches successfully on the Android emulator;
+- HelpHub launches successfully in Chrome;
+- Python 3.12.10 is verified as the backend baseline;
+- the isolated `backend\.venv` uses Python 3.12.10;
+- the FastAPI automated `/health` test passes;
+- Uvicorn starts the HelpHub API successfully;
+- a live `GET /health` request returns HTTP 200 with `{"status":"ok","service":"helphub-api"}`;
+- repository-local Supabase CLI and Firebase CLI versions are verified; and
+- the protected `main` and `develop` branch workflow is established.
+
+The overall Roadmap Stage 2 gate is not yet marked PASS. Issue #9 must still be reviewed and merged through the protected GitHub workflow, and the remaining repository security and evidence checks must be completed.
+
+The FastAPI TestClient test currently passes with one Starlette deprecation warning related to the installed HTTP client integration. The warning is recorded for dependency maintenance and does not invalidate the verified health endpoint.
 
 ## 20. Quick Verification Commands
 
@@ -476,3 +494,59 @@ docker ps --filter "name=supabase" --format "table {{.Names}}\t{{.Status}}"
 ```
 
 Avoid copying or screenshotting credential-heavy Supabase CLI output unless sensitive values have been removed.
+
+## 21. FastAPI Backend Environment and Health Check
+
+HelpHub uses Python 3.12 as the backend development baseline.
+
+From the repository root, create the backend virtual environment with:
+
+```powershell
+py -3.12 -m venv backend\.venv
+```
+
+On Windows PowerShell environments where script execution policy blocks `Activate.ps1`, do not weaken the system execution policy just for HelpHub. Invoke the virtual environment interpreter directly instead.
+
+Enter the backend directory:
+
+```powershell
+Set-Location backend
+```
+
+Install the pinned dependencies:
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+```
+
+Verify dependency consistency:
+
+```powershell
+.\.venv\Scripts\python.exe -m pip check
+```
+
+Run the health endpoint test:
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest tests\test_health.py -v
+```
+
+Start the local FastAPI server:
+
+```powershell
+.\.venv\Scripts\python.exe -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+```
+
+From another PowerShell window, verify the live endpoint:
+
+```powershell
+Invoke-RestMethod -Uri "http://127.0.0.1:8000/health" -Method Get | ConvertTo-Json -Compress
+```
+
+Expected response:
+
+```json
+{"status":"ok","service":"helphub-api"}
+```
+
+The `/health` endpoint confirms that the FastAPI process is available. It does not by itself prove that Supabase, Firebase, external services, or the complete HelpHub system are healthy.

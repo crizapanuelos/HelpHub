@@ -1,0 +1,1 @@
+"""HelpHub FastAPI application package."""
