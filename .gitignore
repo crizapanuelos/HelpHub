@@ -57,12 +57,15 @@ app.*.map.json
 *.pfx
 *service-account*.json
 firebase-adminsdk*.json
+firebase-admin*.json
 
 # Python / FastAPI local environment and cache
 .venv/
 venv/
 __pycache__/
 *.py[cod]
+.pytest_cache/
+.coverage
 
 # Supabase CLI generated local state
 supabase/.temp/
@@ -71,3 +74,6 @@ supabase/.temp/
 node_modules/
 npm-debug.log*
 .npmrc
+
+# Local editor settings
+.vscode/settings.local.json
