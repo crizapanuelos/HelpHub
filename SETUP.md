@@ -86,6 +86,7 @@ The following environment components were verified during Roadmap Stage 2 reposi
 | pip | 26.2.1 inside `backend\.venv` |
 | Supabase CLI | 2.113.0 |
 | Firebase CLI | 15.24.0 via `firebase.cmd` |
+| FlutterFire CLI | 1.4.1 |
 | WSL | 2.7.11.0 |
 | Docker Desktop | 4.86.0 |
 | Docker Engine | 29.7.2 |
@@ -436,10 +437,13 @@ Verified portions of the current gate include:
 - the FastAPI automated `/health` test passes;
 - Uvicorn starts the HelpHub API successfully;
 - a live `GET /health` request returns HTTP 200 with `{"status":"ok","service":"helphub-api"}`;
-- repository-local Supabase CLI and Firebase CLI versions are verified; and
+- Supabase CLI, Firebase CLI, and FlutterFire CLI versions are verified;
+- the Stage 2 tracked secret/key filename scan returned no prohibited matches;
+- the targeted tracked-content secret-pattern scan returned no matches;
+- `backend/.env.example` exists as a comment-only safe template with no secret values; and
 - the protected `main` and `develop` branch workflow is established.
 
-The overall Roadmap Stage 2 gate is not yet marked PASS. Issue #9 must still be reviewed and merged through the protected GitHub workflow, and the remaining repository security and evidence checks must be completed.
+The overall Roadmap Stage 2 gate is not yet marked PASS. Issue #9 is complete: PR #10 was independently reviewed, approved, merged into `develop`, and the issue was closed. Issue #11 must still be independently reviewed and merged through the protected GitHub workflow, followed by final verification on merged `develop`.
 
 The FastAPI TestClient test currently passes with one Starlette deprecation warning related to the installed HTTP client integration. The warning is recorded for dependency maintenance and does not invalidate the verified health endpoint.
 
