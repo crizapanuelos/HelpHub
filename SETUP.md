@@ -443,7 +443,7 @@ Verified portions of the current gate include:
 - `backend/.env.example` exists as a comment-only safe template with no secret values; and
 - the protected `main` and `develop` branch workflow is established.
 
-The overall Roadmap Stage 2 gate is not yet marked PASS. Issue #9 is complete: PR #10 was independently reviewed, approved, merged into `develop`, and the issue was closed. Issue #11 must still be independently reviewed and merged through the protected GitHub workflow, followed by final verification on merged `develop`.
+The overall Roadmap Stage 2 gate is marked **PASS**. Issue #9 / PR #10 and Issue #11 / PR #12 completed the protected independent-review workflow. Final post-merge verification was completed on `develop` at commit `82361f794e258801e82062e7bbe2968721de61f4`: Flutter static analysis and automated tests passed, the FastAPI automated test and live `/health` request passed, the tracked secret/key filename and targeted content scans returned no matches, the required ignore rules behaved as intended, `backend/.env.example` remained a safe comment-only template, and the repository finished clean and synchronized with `origin/develop`.
 
 The FastAPI TestClient test currently passes with one Starlette deprecation warning related to the installed HTTP client integration. The warning is recorded for dependency maintenance and does not invalidate the verified health endpoint.
 
