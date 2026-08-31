@@ -735,21 +735,26 @@ Complete only after an actual decision/approval session.
 
 ## 22. Stage 3 Gate Decision
 
-This section must not be completed as `PASS` until the requirements approval and Stage 3 blocking conditions are satisfied.
+The professor approved proceeding with HelpHub development as an academic Software Engineering project.
 
-- Gate result: NOT YET RECORDED
-- Gate decision date: NOT YET RECORDED
-- Gate approver(s): NOT YET RECORDED
-- Evidence reference: NOT YET RECORDED
-- Corrections required: NOT YET RECORDED
+This approval authorizes development of the academic prototype. It must not be represented as official adoption of HelpHub policy, algorithm values, response commitments, or operating procedures by an actual barangay.
 
-Allowed gate outcomes:
+- Gate result: PASS WITH CORRECTIONS
+- Gate decision date: 2026-08-05
+- Gate approver(s): Professor / Software Engineering academic project approver
+- Evidence reference: Oral approval during Software Engineering project consultation
+- Corrections required:
+  1. HelpHub remains an academic prototype unless a later documented stakeholder decision changes the deployment scope.
+  2. Approval to proceed does not convert provisional concern taxonomy, rules, factor anchors, weights, thresholds, handlers/referrals, deadlines, workflow transitions, non-SOS Critical rules, emergency-escalation rules, retention periods, or validation criteria into official barangay policy.
+  3. Database and configuration design must remain versioned and configuration-driven so unresolved policy values are not hard-coded into the schema.
+  4. Exact academic-prototype algorithm and workflow configuration values must be explicitly recorded before the corresponding configuration version is activated for implementation validation.
+  5. The same approved configuration version must reproduce the same algorithm result for the same input.
+  6. Deployment-, privacy-, evaluation-, and validation-specific corrections must be resolved before their corresponding later roadmap gates.
+  7. Any future real-barangay deployment requires separate stakeholder validation and must not rely solely on this academic approval.
 
-- `PASS`
-- `PASS WITH CORRECTIONS`
-- `BLOCKED`
+Stage 3 is therefore permitted to close as `PASS WITH CORRECTIONS`.
 
-A later roadmap stage must not begin until the Stage 3 gate is formally recorded as `PASS` or `PASS WITH CORRECTIONS` and required corrections are recorded.
+Roadmap Stage 4 may begin after this gate decision and its required corrections are recorded consistently in the repository.
 
 ---
 
