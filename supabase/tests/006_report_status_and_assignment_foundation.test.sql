@@ -858,7 +858,15 @@ set local request.jwt.claim.sub =
     '55060000-1000-4000-8000-000000000001';
 
 
--- 24. Resident One sees exactly one row from each operational table.
+-- 24. Resident One is still an authoritative approved Resident.
+select ok(
+    public.is_approved_resident(),
+    'Resident One is recognized as an approved Resident'
+);
+
+
+-- 25. Approved Resident One receives no direct rows from the raw
+-- operational lifecycle or routing tables.
 select results_eq(
     $$
         select
@@ -869,28 +877,13 @@ select results_eq(
     $$,
     $$
         values (
-            1::bigint,
-            1::bigint,
-            1::bigint,
-            1::bigint
+            0::bigint,
+            0::bigint,
+            0::bigint,
+            0::bigint
         )
     $$,
-    'approved Resident One sees exactly one own row in each operational table'
-);
-
-
--- 25. The visible lifecycle state belongs to Resident One's exact report.
-select results_eq(
-    $$
-        select report_id::text
-        from public.report_lifecycle_states
-    $$,
-    $$
-        values (
-            '55060000-3000-4000-8000-000000000001'
-        )
-    $$,
-    'approved Resident One sees only lifecycle state for Resident One report'
+    'approved Resident One receives no direct raw operational tracking rows'
 );
 
 
@@ -902,7 +895,15 @@ set local request.jwt.claim.sub =
     '55060000-1000-4000-8000-000000000002';
 
 
--- 26. Resident Two sees exactly one row from each operational table.
+-- 26. Resident Two is still an authoritative approved Resident.
+select ok(
+    public.is_approved_resident(),
+    'Resident Two is recognized as an approved Resident'
+);
+
+
+-- 27. Approved Resident Two receives no direct rows from the raw
+-- operational lifecycle or routing tables.
 select results_eq(
     $$
         select
@@ -913,28 +914,13 @@ select results_eq(
     $$,
     $$
         values (
-            1::bigint,
-            1::bigint,
-            1::bigint,
-            1::bigint
+            0::bigint,
+            0::bigint,
+            0::bigint,
+            0::bigint
         )
     $$,
-    'approved Resident Two sees exactly one own row in each operational table'
-);
-
-
--- 27. The visible lifecycle state belongs to Resident Two's exact report.
-select results_eq(
-    $$
-        select report_id::text
-        from public.report_lifecycle_states
-    $$,
-    $$
-        values (
-            '55060000-3000-4000-8000-000000000002'
-        )
-    $$,
-    'approved Resident Two sees only lifecycle state for Resident Two report'
+    'approved Resident Two receives no direct raw operational tracking rows'
 );
 
 

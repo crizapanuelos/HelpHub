@@ -1428,19 +1428,21 @@ comment on column public.report_routing_states.source_history_id is
 -- 9. OPERATIONAL REPORT READ POLICIES
 -- =============================================================================
 --
--- Residents require report tracking for their own submitted concerns.
--- Barangay Administrators require report visibility for administrative
--- handling.
+-- These four tables are the authoritative raw operational representation of
+-- lifecycle and routing state/history.
 --
--- These policies expose READ access only.
+-- They contain implementation and administrative details such as actor IDs,
+-- audit-event IDs, routing destinations, routing notes, and status-change
+-- notes. Task 04.6 therefore does not expose these raw records directly to
+-- Residents.
 --
--- Residents:
---   - must have an approved Resident profile;
---   - may read operational records only when the parent public.reports row
---     belongs to auth.uid().
+-- Residents still require report tracking, including the approved current
+-- status and permitted status history. A later Resident-facing projection or
+-- protected API will expose only the fields explicitly approved for Resident
+-- tracking without leaking internal administrative or routing details.
 --
--- Approved Barangay Administrators:
---   - may read operational lifecycle and routing records for all reports.
+-- Approved Barangay Administrators may read the raw operational records needed
+-- for administrative handling.
 --
 -- INSERT, UPDATE, and DELETE remain unavailable to authenticated clients.
 -- Authoritative lifecycle/routing mutation will later occur only through
@@ -1451,21 +1453,6 @@ comment on column public.report_routing_states.source_history_id is
 -- =============================================================================
 -- 9.1 CURRENT LIFECYCLE STATE
 -- =============================================================================
-
-create policy report_lifecycle_states_select_own_approved_resident
-on public.report_lifecycle_states
-for select
-to authenticated
-using (
-    public.is_approved_resident()
-    and exists (
-        select 1
-        from public.reports as r
-        where r.id = report_lifecycle_states.report_id
-          and r.resident_id = auth.uid()
-    )
-);
-
 
 create policy report_lifecycle_states_select_approved_admin
 on public.report_lifecycle_states
@@ -1480,21 +1467,6 @@ using (
 -- 9.2 STATUS HISTORY
 -- =============================================================================
 
-create policy report_status_history_select_own_approved_resident
-on public.report_status_history
-for select
-to authenticated
-using (
-    public.is_approved_resident()
-    and exists (
-        select 1
-        from public.reports as r
-        where r.id = report_status_history.report_id
-          and r.resident_id = auth.uid()
-    )
-);
-
-
 create policy report_status_history_select_approved_admin
 on public.report_status_history
 for select
@@ -1508,21 +1480,6 @@ using (
 -- 9.3 CURRENT ROUTING / ASSIGNMENT STATE
 -- =============================================================================
 
-create policy report_routing_states_select_own_approved_resident
-on public.report_routing_states
-for select
-to authenticated
-using (
-    public.is_approved_resident()
-    and exists (
-        select 1
-        from public.reports as r
-        where r.id = report_routing_states.report_id
-          and r.resident_id = auth.uid()
-    )
-);
-
-
 create policy report_routing_states_select_approved_admin
 on public.report_routing_states
 for select
@@ -1535,21 +1492,6 @@ using (
 -- =============================================================================
 -- 9.4 ROUTING / ASSIGNMENT HISTORY
 -- =============================================================================
-
-create policy report_routing_history_select_own_approved_resident
-on public.report_routing_history
-for select
-to authenticated
-using (
-    public.is_approved_resident()
-    and exists (
-        select 1
-        from public.reports as r
-        where r.id = report_routing_history.report_id
-          and r.resident_id = auth.uid()
-    )
-);
-
 
 create policy report_routing_history_select_approved_admin
 on public.report_routing_history
